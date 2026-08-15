@@ -6,7 +6,7 @@ ArticlePilot adalah aplikasi Android yang menjadi **translator dan execution eng
 
 ## Status proyek
 
-Repositori ini adalah **fondasi produksi bertahap**, bukan MVP atau demo throwaway. Model domain, parser Article Format v1.0, generic validation engine, Media Core image pipeline JVM, Article Workspace Android, kontrak parser/validator/media/browser/automation, dokumentasi, dan pengujian deterministik telah dibuat. Fondasi Android WebView/session kini tersedia untuk membuka `https://community.idntimes.com/dashboard/create-article`, membatasi origin, melakukan inspeksi sanitized, dan menampilkan login/manual takeover state. Room schema, Android storage adapter, WorkManager orchestration, image compression, authenticated selector IDN Times terverifikasi, dan automation runner produksi sengaja belum diaktifkan karena boundary platform tersebut belum diverifikasi.
+Repositori ini adalah **fondasi produksi bertahap**, bukan MVP atau demo throwaway. Model domain, parser Article Format v1.0, generic validation engine, Media Core image pipeline JVM, Article Workspace Android, kontrak parser/validator/media/browser/automation, dokumentasi, dan pengujian deterministik telah dibuat. Fondasi Android WebView/session kini tersedia untuk membuka `https://community.idntimes.com/dashboard/create-article`, membatasi origin, melakukan inspeksi sanitized, dan menampilkan login/manual takeover state. Task 10 telah mencoba reconnaissance melalui Playwright, termasuk percobaan transient menggunakan file sesi yang disediakan pengguna, tetapi hasil akhirnya tetap public shell tanpa authenticated editor; takeover interaktif juga tidak tersedia pada sesi terisolasi. Hasil lengkapnya ada di [`docs/idn-times-editor-recon-v1.md`](docs/idn-times-editor-recon-v1.md). Room schema, Android storage adapter, WorkManager orchestration, image compression, authenticated selector IDN Times terverifikasi, dan automation runner produksi sengaja belum diaktifkan karena boundary platform tersebut belum diverifikasi.
 
 | Area | Status tahap pertama |
 | --- | --- |
@@ -16,7 +16,7 @@ Repositori ini adalah **fondasi produksi bertahap**, bukan MVP atau demo throwaw
 | Validation | Generic Article Validation Engine, policy requirements, severity, dan deterministic diagnostics tersedia |
 | Image pipeline | Controlled downloader, temporary/ready storage, MIME/dimension inspection, validator, retry, state, cleanup, pipeline tests, dan integrasi workspace tersedia |
 | Persistence | Boundary draft/revision/session/log tersedia; Room schema belum disetujui |
-| Browser/WebView | Android WebView host/session, origin policy, sanitized inspection, manual-login fallback, dan UI state tersedia; authenticated editor belum terverifikasi |
+| Browser/WebView | Android WebView host/session, origin policy, sanitized inspection, manual-login fallback, dan UI state tersedia; Task 10 belum memverifikasi authenticated editor setelah manual takeover dan transient session-file attempt |
 | Automation state/recovery | Checkpoint, state, recovery contracts, dan manual takeover boundary tersedia |
 | IDN Times profile/selectors | Entry-point/origin profile tersedia; authenticated/editor markers dan selectors tetap kosong sampai current evidence direview |
 | CI | Workflow build/test/lint disiapkan |
@@ -71,7 +71,7 @@ Implementasi production berikutnya harus mempertahankan beberapa batas. Kegagala
 
 ## Langkah implementasi berikutnya
 
-Langkah berikut yang paling tepat adalah melakukan controlled manual authentication pada device/emulator dan menghasilkan sanitized authenticated editor snapshot. Setelah snapshot direview, tambahkan local HTML fixtures, profile version, dan selector candidates yang memiliki read-back evidence. Jangan mengaktifkan mutation bridge atau publishing automation sebelum editor structure dan session semantics benar-benar diamati.
+Langkah berikut yang paling tepat adalah melakukan controlled manual authentication pada device/emulator atau sesi browser yang benar-benar dapat diambil alih pengguna, lalu menghasilkan sanitized authenticated editor snapshot. Task 10 tidak dapat menyelesaikan login karena sesi Playwright terisolasi tidak menyediakan takeover interaktif. Setelah snapshot direview, tambahkan local HTML fixtures, profile version, dan selector candidates yang memiliki read-back evidence. Jangan mengaktifkan mutation bridge atau publishing automation sebelum editor structure dan session semantics benar-benar diamati.
 
 ## Referensi teknis
 
