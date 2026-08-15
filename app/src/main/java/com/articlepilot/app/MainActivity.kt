@@ -3,55 +3,41 @@ package com.articlepilot.app
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.activity.viewModels
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.material3.Surface
+import com.articlepilot.app.workspace.application.AndroidMediaPipelineFactory
+import com.articlepilot.app.workspace.application.ArticleWorkspaceDependencies
+import com.articlepilot.app.workspace.application.ArticleWorkspaceViewModel
+import com.articlepilot.app.workspace.application.ArticleWorkspaceViewModelFactory
+import com.articlepilot.app.workspace.ui.ArticleWorkspaceScreen
+import com.articlepilot.core.parser.ArticleFormatV1Parser
+import com.articlepilot.core.validator.ArticleValidationEngine
 
 class MainActivity : ComponentActivity() {
+    private val workspaceViewModel: ArticleWorkspaceViewModel by viewModels {
+        ArticleWorkspaceViewModelFactory(
+            ArticleWorkspaceDependencies(
+                parser = ArticleFormatV1Parser(),
+                validator = ArticleValidationEngine(),
+                mediaPipelineFactory = AndroidMediaPipelineFactory(applicationContext),
+            ),
+        )
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             ArticlePilotTheme {
-                ArticlePilotShell()
+                Surface(color = MaterialTheme.colorScheme.background) {
+                    ArticleWorkspaceScreen(workspaceViewModel)
+                }
             }
         }
     }
 }
 
-@Composable
-private fun ArticlePilotShell() {
-    Scaffold { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(24.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-        ) {
-            Text(
-                text = "ArticlePilot",
-                style = MaterialTheme.typography.headlineMedium,
-            )
-            Text(
-                text = "Article → Images → Preview → Publish",
-                style = MaterialTheme.typography.titleMedium,
-            )
-            Text(
-                text = "Fondasi aplikasi telah disiapkan. Modul produksi akan diimplementasikan secara bertahap; browser automation belum aktif.",
-                style = MaterialTheme.typography.bodyLarge,
-            )
-        }
-    }
-}
-
-@Composable
-private fun ArticlePilotTheme(content: @Composable () -> Unit) {
+@androidx.compose.runtime.Composable
+private fun ArticlePilotTheme(content: @androidx.compose.runtime.Composable () -> Unit) {
     MaterialTheme(content = content)
 }

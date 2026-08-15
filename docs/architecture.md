@@ -8,7 +8,7 @@ ArticlePilot dirancang sebagai aplikasi Android lokal yang menerjemahkan dokumen
 
 | Layer | Modul | Tanggung jawab utama | Tidak boleh mengetahui |
 | --- | --- | --- | --- |
-| Presentation | `app` | Compose entry point, dependency composition, navigasi UI | Detail selector dan HTTP download |
+| Presentation/application feature | `app` | Compose entry point, Article Workspace ViewModel/use cases, dependency composition, navigasi UI | Detail selector, HTTP download, dan parser/media implementation di Composable |
 | Domain | `core:model` | Article, section, block, image asset, draft, publishing session | Android View, WebView, IDN Times DOM |
 | Translation | `core:parser` | Memetakan input versioned ke Article atau diagnostics | DOM platform |
 | Rules | `core:validator` | `ArticleValidationEngine` menjalankan generic semantic rules, policy requirements, dan mengembalikan issues deterministik | Detail UI, parser source text, dan mekanisme download |
@@ -17,7 +17,7 @@ ArticlePilot dirancang sebagai aplikasi Android lokal yang menerjemahkan dokumen
 | Browser | `browser:*` | WebView lifecycle, session observation, JS bridge | Article parsing rules |
 | Automation | `automation:*` | State machine, profile, semantic selectors, retry/recovery | Raw Compose state |
 
-Dependency direction mengalir dari adapter ke kontrak yang lebih stabil. `core:model` menjadi pusat data, sementara `automation:profiles` menggabungkan policy dan selector platform. Dengan demikian, IDN Times-specific logic tidak tersebar di parser atau UI.
+Dependency direction mengalir dari adapter ke kontrak yang lebih stabil. `core:model` menjadi pusat data, sementara `app/workspace` mengorkestrasi session-scoped Article Workspace melalui ViewModel dan application contracts. `automation:profiles` tetap menggabungkan policy dan selector platform. Dengan demikian, IDN Times-specific logic tidak tersebar di parser, workspace UI, atau domain model.
 
 ## Keputusan penting
 
@@ -41,7 +41,7 @@ Draft, revision, image metadata, publishing session, checkpoint, dan log diranca
 
 | Keputusan | Alasan ditunda | Kriteria untuk melanjutkan |
 | --- | --- | --- |
-| Parser integration ke UI import | Parser production dan fixture sudah tersedia, tetapi composition root belum menggunakannya | Import flow memiliki dependency composition, error presentation, dan draft persistence |
+| Durable workspace persistence | Article Workspace menggunakan state session-scoped dan raw source tetap berada di ViewModel | Process-death restoration, draft retention, dan migration policy disetujui |
 | Sintaks final ArticlePilot | Format v1.0 sudah dibekukan | Versi berikutnya memerlukan migration policy dan fixture baru |
 | Room entities/DAOs | Skema harus mendukung revision, recovery, dan cleanup | Retention policy serta migration test tersedia |
 | Android HTTP/storage integration | JVM Media Core sudah memiliki `JvmHttpTransport` dengan redirect, timeout, retry, size limit, dan temporary storage; adapter Android belum dipilih | App-private lifecycle, cancellation, WorkManager constraints, dan threat model ditetapkan |

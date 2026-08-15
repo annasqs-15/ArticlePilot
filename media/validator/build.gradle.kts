@@ -2,6 +2,12 @@ plugins {
     id("org.jetbrains.kotlin.jvm")
 }
 
+group = "com.articlepilot.media"
+
+base {
+    archivesName.set("media-validator")
+}
+
 dependencies {
     implementation(project(":core:model"))
     implementation(project(":media:storage"))

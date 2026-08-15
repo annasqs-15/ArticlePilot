@@ -6,15 +6,15 @@ ArticlePilot adalah aplikasi Android yang menjadi **translator dan execution eng
 
 ## Status proyek
 
-Repositori ini adalah **fondasi produksi tahap pertama**, bukan MVP atau demo throwaway. Model domain, parser Article Format v1.0, generic validation engine, Media Core image pipeline JVM, boundary modul, kontrak parser/validator/media/browser/automation, struktur persistence, dokumentasi, dan pengujian kontrak telah dibuat. Room schema, Android storage adapter, WorkManager orchestration, image compression, WebView bridge produksi, selector IDN Times terverifikasi, dan automation runner produksi sengaja belum diaktifkan karena boundary platform tersebut belum diverifikasi.
+Repositori ini adalah **fondasi produksi bertahap**, bukan MVP atau demo throwaway. Model domain, parser Article Format v1.0, generic validation engine, Media Core image pipeline JVM, Article Workspace Android, boundary modul, kontrak parser/validator/media/browser/automation, dokumentasi, dan pengujian deterministik telah dibuat. Room schema, Android storage adapter, WorkManager orchestration, image compression, WebView bridge produksi, selector IDN Times terverifikasi, dan automation runner produksi sengaja belum diaktifkan karena boundary platform tersebut belum diverifikasi.
 
 | Area | Status tahap pertama |
 | --- | --- |
-| Android Compose application shell | Tersedia sebagai composition root minimal |
+| Android Article Workspace | Import/paste, parse, validation review, ordered article review, image processing, local preview, retry/cancel, dan strict local READY tersedia |
 | Core article model | Tersedia dan extensible |
 | Parser | Parser pure Kotlin Article Format v1.0 dan fixture-driven tests tersedia |
 | Validation | Generic Article Validation Engine, policy requirements, severity, dan deterministic diagnostics tersedia |
-| Image pipeline | Controlled downloader, temporary/ready storage, MIME/dimension inspection, validator, retry, state, cleanup, dan pipeline tests tersedia |
+| Image pipeline | Controlled downloader, temporary/ready storage, MIME/dimension inspection, validator, retry, state, cleanup, pipeline tests, dan integrasi workspace tersedia |
 | Persistence | Boundary draft/revision/session/log tersedia; Room schema belum disetujui |
 | Browser/WebView | Adapter boundary tersedia; tidak ada fake automation |
 | Automation state/recovery | Checkpoint, state, recovery contracts, dan manual takeover boundary tersedia |
@@ -52,7 +52,7 @@ Untuk IDE, buka root repository sebagai proyek Gradle. Jangan menyimpan `local.p
 
 | Direktori | Tanggung jawab |
 | --- | --- |
-| `app/` | Android application shell dan composition root Compose |
+| `app/` | Android Article Workspace, Compose UI, immutable presentation state, ViewModel/application orchestration, dan composition root |
 | `core/model/` | Model artikel dan asset yang serializable serta extensible |
 | `core/parser/` | Parser v1.0, kontrak versioned, diagnostics, dan fixture-driven tests |
 | `core/validator/` | Validation policy, diagnostics, dan severity |
@@ -69,7 +69,7 @@ Implementasi production berikutnya harus mempertahankan beberapa batas. Kegagala
 
 ## Langkah implementasi berikutnya
 
-Langkah berikut yang paling tepat adalah menambahkan Android storage adapter dan WorkManager-backed persistence untuk resume lifecycle media, lalu menurunkan skema Room dari publishing session. Setelah itu, image compression policy, browser handoff, dan selector profile IDN Times dapat dikerjakan sebagai boundary terpisah setelah workflow editor dan DOM aktual diverifikasi secara manual, tanpa melewati mekanisme keamanan platform.
+Langkah berikut yang paling tepat adalah menambahkan test coverage Compose/instrumentation untuk workspace, lalu Android storage adapter dan WorkManager-backed persistence untuk resume lifecycle media. Setelah itu, skema Room dapat diturunkan dari publishing session; image compression policy, browser handoff, dan selector profile IDN Times tetap dikerjakan sebagai boundary terpisah setelah workflow editor dan DOM aktual diverifikasi secara manual, tanpa melewati mekanisme keamanan platform.
 
 ## Referensi teknis
 
