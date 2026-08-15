@@ -6,13 +6,13 @@ ArticlePilot adalah aplikasi Android yang menjadi **translator dan execution eng
 
 ## Status proyek
 
-Repositori ini adalah **fondasi produksi tahap pertama**, bukan MVP atau demo throwaway. Model domain, boundary modul, kontrak parser/validator/media/browser/automation, struktur persistence, dokumentasi, dan pengujian kontrak telah dibuat. Implementasi parser sintaks final, Room schema, image pipeline nyata, WebView bridge produksi, selector IDN Times terverifikasi, dan automation runner produksi sengaja belum diaktifkan karena spesifikasi format serta DOM platform belum final atau belum diverifikasi.
+Repositori ini adalah **fondasi produksi tahap pertama**, bukan MVP atau demo throwaway. Model domain, parser Article Format v1.0, boundary modul, kontrak parser/validator/media/browser/automation, struktur persistence, dokumentasi, dan pengujian kontrak telah dibuat. Room schema, image pipeline nyata, WebView bridge produksi, selector IDN Times terverifikasi, dan automation runner produksi sengaja belum diaktifkan karena boundary platform tersebut belum diverifikasi.
 
 | Area | Status tahap pertama |
 | --- | --- |
 | Android Compose application shell | Tersedia sebagai composition root minimal |
 | Core article model | Tersedia dan extensible |
-| Parser | Kontrak versioned tersedia; implementasi sintaks final belum aktif |
+| Parser | Parser pure Kotlin Article Format v1.0 dan fixture-driven tests tersedia |
 | Validation | Kontrak policy dan diagnostic tersedia |
 | Image pipeline | Boundary downloader/validator/processor tersedia; pipeline nyata belum aktif |
 | Persistence | Boundary draft/revision/session/log tersedia; Room schema belum disetujui |
@@ -54,7 +54,7 @@ Untuk IDE, buka root repository sebagai proyek Gradle. Jangan menyimpan `local.p
 | --- | --- |
 | `app/` | Android application shell dan composition root Compose |
 | `core/model/` | Model artikel dan asset yang serializable serta extensible |
-| `core/parser/` | Kontrak parser dan version registry |
+| `core/parser/` | Parser v1.0, kontrak versioned, diagnostics, dan fixture-driven tests |
 | `core/validator/` | Validation policy, diagnostics, dan severity |
 | `core/database/` | Boundary persistence lokal berbasis Room |
 | `media/` | Downloader, processor, dan validator media |
@@ -69,7 +69,7 @@ Implementasi production berikutnya harus mempertahankan beberapa batas. Kegagala
 
 ## Langkah implementasi berikutnya
 
-Langkah berikut yang paling tepat adalah menyepakati format ArticlePilot versi `1.0` dan aturan validasi minimum, kemudian mengimplementasikan parser fixture-driven beserta validator generik. Setelah itu, skema Room dan lifecycle temporary media dapat diturunkan dari model yang sudah tersedia. Selector serta profile IDN Times baru boleh diisi setelah workflow editor dan DOM aktual diverifikasi secara manual, tanpa melewati mekanisme keamanan platform.
+Langkah berikut yang paling tepat adalah menurunkan validator generik ArticlePilot dari model dan hasil parser v1.0, termasuk aturan section kosong serta kebijakan metadata platform. Setelah itu, skema Room dan lifecycle temporary media dapat diturunkan dari model yang sudah tersedia. Selector serta profile IDN Times baru boleh diisi setelah workflow editor dan DOM aktual diverifikasi secara manual, tanpa melewati mekanisme keamanan platform.
 
 ## Referensi teknis
 
