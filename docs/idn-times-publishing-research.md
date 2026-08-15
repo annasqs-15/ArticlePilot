@@ -45,7 +45,7 @@ Klasifikasi fakta dalam dokumen ini adalah sebagai berikut.
 | [9] | [FAQ: Apa itu Community Writer?][9] | Definisi contributor dan moderasi/penyuntingan sebelum publikasi. | Official support FAQ. |
 | [10] | [FAQ: Bagaimana Cara Menjadi Community Writer di IDN Times Community?][10] | IDN App account, menu `Tulis Berita`, dan `Menu Kreator`. | Official support FAQ; entry point contributor paling eksplisit yang ditemukan. |
 | [11] | [IDN Connect user guide: IDN Points][11] | Candidate current IDN Connect user guide yang ditemukan, tetapi halaman hanya merender loading shell saat diuji. | Candidate source; tidak dipakai untuk menetapkan UI atau workflow. |
-| [12] | [Sanitized Task 08 Playwright reconnaissance observations][12] | Evidence lokal tentang public shell, session probe, dashboard/page shell routes, dan API status; tidak mengandung cookie atau data akun. | Project-local observation; authenticated state tidak terkonfirmasi. |
+| [12] | [Task 08 authenticated reconnaissance report][12] | Laporan output wajib berisi public shell, session probe, dashboard/page shell routes, API status, mapping, boundary, dan unknowns; tidak mengandung cookie atau data akun. | Project-local observation; authenticated state tidak terkonfirmasi. |
 
 > **Catatan akses:** Task 08 membuka `https://community.idntimes.com/dashboard/` melalui Playwright dan menerapkan tiga assignment `document.cookie` dari file sesi secara terbatas pada konteks IDN. Initial title sempat menjadi `Manage Article Community | IDN Times`, tetapi setelah settle accessibility snapshot kembali menampilkan public shell dengan tombol `Masuk/Daftar`; request `/api/community/layout?...slug=dashboard-notifications` juga mengembalikan `401`. Route RSC `manage-article`, `events`, dan `guidelines` beberapa kali mengembalikan `200`, tetapi page shell `200` tidak membuktikan authenticated permission. Nilai cookie, credential, request body, dan data akun tidak disimpan. Karena session authenticated belum terverifikasi, current editor tidak boleh dianggap terobservasi.[12]
 
@@ -337,7 +337,7 @@ Hanya setelah authenticated evidence tersedia dan direview, ArticlePilot boleh m
 
 ## 15. Documentation and implementation boundary for this task
 
-This task intentionally makes no production code changes. It adds this research specification and a sanitized observation record at `docs/idn-times-recon-task08-observations.md`; the temporary local research notes used during synthesis were not committed as source of truth. No WebView, JavaScript bridge implementation, DOM selector, coordinate click, login automation, credential storage, CAPTCHA bypass, anti-bot bypass, or automatic publishing was added. Playwright was used only for passive reconnaissance and limited session probing.
+This task intentionally makes no production code changes. It adds this research specification, the required report at `docs/idn-times-authenticated-reconnaissance.md`, and a supporting sanitized observation record at `docs/idn-times-recon-task08-observations.md`; the temporary local research notes used during synthesis were not committed as source of truth. No WebView, JavaScript bridge implementation, DOM selector, coordinate click, login automation, credential storage, CAPTCHA bypass, anti-bot bypass, or automatic publishing was added. Playwright was used only for passive reconnaissance and limited session probing.
 
 The source of truth for future Browser Automation design is this document together with `docs/automation.md`, `docs/recovery.md`, `docs/architecture.md`, and the existing browser/automation contracts. Where this document says **UNKNOWN**, ArticlePilot must pause at implementation time rather than invent behavior.
 
@@ -365,4 +365,4 @@ The source of truth for future Browser Automation design is this document togeth
 
 [11]: https://connect.idn.media/my-account/user-guide/points "IDN Connect: IDN Points user guide"
 
-[12]: ./idn-times-recon-task08-observations.md "ArticlePilot Task 08 sanitized Playwright reconnaissance observations"
+[12]: ./idn-times-authenticated-reconnaissance.md "ArticlePilot Task 08 authenticated reconnaissance report"
