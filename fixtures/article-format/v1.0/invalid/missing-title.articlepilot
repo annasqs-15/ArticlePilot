@@ -1,0 +1,7 @@
+@article version: 1.0
+@excerpt
+Ada excerpt tetapi tidak ada title.
+@section
+@text
+Isi section.
+@end-text

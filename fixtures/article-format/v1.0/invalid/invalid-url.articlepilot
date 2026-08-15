@@ -1,0 +1,7 @@
+@article version: 1.0
+@title
+URL Invalid
+@section
+@image
+download-url: ftp://cdn.example.com/image with space.jpg
+@end-image

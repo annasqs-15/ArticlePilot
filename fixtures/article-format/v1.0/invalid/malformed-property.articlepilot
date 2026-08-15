@@ -1,0 +1,7 @@
+@article version: 1.0
+@title
+Property Invalid
+@section
+@image
+download-url https://cdn.example.com/image.jpg
+@end-image

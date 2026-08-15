@@ -40,6 +40,6 @@ class ArticleValidatorTest {
 
     @Suppress("UNUSED_VARIABLE")
     private fun domainArticleForPolicyContract(): Article {
-        return Article(formatVersion = "1.0-draft", metadata = ArticleMetadata(title = "Title"))
+        return Article(formatVersion = "1.0", metadata = ArticleMetadata(title = "Title"))
     }
 }

@@ -1,0 +1,15 @@
+@article version: 1.0
+@title
+Judul: Apa, Mengapa, dan Bagaimana?
+@excerpt
+Ringkasan—dengan dash, koma, titik dua, tanda kutip "langsung", dan (kurung).
+@category
+Tips & Panduan
+@tag
+AI-assisted, tetapi tetap diedit manusia
+@section
+@heading
+Pertanyaan yang sering muncul
+@text
+Punctuation pada metadata tidak mengubah batas directive.
+@end-text

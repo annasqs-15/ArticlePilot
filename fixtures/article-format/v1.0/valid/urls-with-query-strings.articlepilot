@@ -1,0 +1,9 @@
+@article version: 1.0
+@title
+URL dengan Query String
+@section
+@image
+download-url: https://images.example.com/photo.webp?width=1600&height=900&quality=85#hero
+source-url: https://source.example.com/gallery/item?id=42&view=full
+caption: URL tetap utuh setelah parsing.
+@end-image

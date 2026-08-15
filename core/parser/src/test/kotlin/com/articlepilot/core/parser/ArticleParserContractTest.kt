@@ -12,17 +12,17 @@ class ArticleParserContractTest {
         val parser = object : ArticleParser {
             override fun parse(source: String): ParseResult = ParseResult.Success(
                 article = Article(
-                    formatVersion = "1.0-draft",
+                    formatVersion = "1.0",
                     metadata = ArticleMetadata(title = source),
                 ),
-                sourceFormatVersion = "1.0-draft",
+                sourceFormatVersion = "1.0",
             )
         }
 
         val result = parser.parse("Title") as ParseResult.Success
 
         assertEquals("Title", result.article.metadata.title)
-        assertEquals("1.0-draft", result.sourceFormatVersion)
+        assertEquals("1.0", result.sourceFormatVersion)
     }
 
     @Test

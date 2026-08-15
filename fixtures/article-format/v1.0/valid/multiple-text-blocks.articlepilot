@@ -1,0 +1,15 @@
+@article version: 1.0
+@title
+Beberapa Blok Teks
+@section
+@heading
+Urutan Paragraf
+@text
+Paragraf pertama.
+@end-text
+@text
+Paragraf kedua tetap menjadi block terpisah.
+@end-text
+@text
+Paragraf ketiga.
+@end-text

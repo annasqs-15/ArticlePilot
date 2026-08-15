@@ -1,0 +1,130 @@
+{
+  "formatVersion": "1.0",
+  "cases": [
+    {
+      "path": "valid/minimal.articlepilot",
+      "outcome": "success",
+      "diagnosticCodes": []
+    },
+    {
+      "path": "valid/with-excerpt-and-metadata.articlepilot",
+      "outcome": "success",
+      "diagnosticCodes": []
+    },
+    {
+      "path": "valid/with-cover.articlepilot",
+      "outcome": "success",
+      "diagnosticCodes": []
+    },
+    {
+      "path": "valid/multiple-sections.articlepilot",
+      "outcome": "success",
+      "diagnosticCodes": []
+    },
+    {
+      "path": "valid/multiple-text-blocks.articlepilot",
+      "outcome": "success",
+      "diagnosticCodes": []
+    },
+    {
+      "path": "valid/interleaved-text-image-text.articlepilot",
+      "outcome": "success",
+      "diagnosticCodes": []
+    },
+    {
+      "path": "valid/multiple-images.articlepilot",
+      "outcome": "success",
+      "diagnosticCodes": []
+    },
+    {
+      "path": "valid/urls-with-query-strings.articlepilot",
+      "outcome": "success",
+      "diagnosticCodes": []
+    },
+    {
+      "path": "valid/metadata-punctuation.articlepilot",
+      "outcome": "success",
+      "diagnosticCodes": []
+    },
+    {
+      "path": "valid/multiline-text.articlepilot",
+      "outcome": "success",
+      "diagnosticCodes": []
+    },
+    {
+      "path": "valid/unicode-text.articlepilot",
+      "outcome": "success",
+      "diagnosticCodes": []
+    },
+    {
+      "path": "valid/indonesian-text.articlepilot",
+      "outcome": "success",
+      "diagnosticCodes": []
+    },
+    {
+      "path": "invalid/empty-input.articlepilot",
+      "outcome": "failure",
+      "diagnosticCodes": ["EMPTY_INPUT"]
+    },
+    {
+      "path": "invalid/missing-version.articlepilot",
+      "outcome": "failure",
+      "diagnosticCodes": ["MISSING_VERSION"]
+    },
+    {
+      "path": "invalid/unsupported-version.articlepilot",
+      "outcome": "failure",
+      "diagnosticCodes": ["UNSUPPORTED_VERSION"]
+    },
+    {
+      "path": "invalid/missing-title.articlepilot",
+      "outcome": "failure",
+      "diagnosticCodes": ["MISSING_REQUIRED_FIELD"]
+    },
+    {
+      "path": "invalid/duplicate-title.articlepilot",
+      "outcome": "failure",
+      "diagnosticCodes": ["DUPLICATE_SINGLETON"]
+    },
+    {
+      "path": "invalid/malformed-image.articlepilot",
+      "outcome": "failure",
+      "diagnosticCodes": ["MISSING_IMAGE_URL", "MALFORMED_IMAGE"]
+    },
+    {
+      "path": "invalid/missing-image-url.articlepilot",
+      "outcome": "failure",
+      "diagnosticCodes": ["PROPERTY_WITHOUT_VALUE", "MISSING_IMAGE_URL"]
+    },
+    {
+      "path": "invalid/invalid-url.articlepilot",
+      "outcome": "failure",
+      "diagnosticCodes": ["INVALID_URL"]
+    },
+    {
+      "path": "invalid/unknown-directive.articlepilot",
+      "outcome": "failure",
+      "diagnosticCodes": ["UNKNOWN_DIRECTIVE"]
+    },
+    {
+      "path": "invalid/block-outside-section.articlepilot",
+      "outcome": "failure",
+      "diagnosticCodes": ["BLOCK_OUTSIDE_SECTION"]
+    },
+    {
+      "path": "invalid/unterminated-text.articlepilot",
+      "outcome": "failure",
+      "diagnosticCodes": ["UNTERMINATED_TEXT_BLOCK"]
+    },
+    {
+      "path": "invalid/invalid-escaping.articlepilot",
+      "outcome": "failure",
+      "diagnosticCodes": ["INVALID_ESCAPING"]
+    },
+    {
+      "path": "invalid/malformed-property.articlepilot",
+      "outcome": "failure",
+      "diagnosticCodes": ["MALFORMED_PROPERTY"]
+    }
+  ]
+}

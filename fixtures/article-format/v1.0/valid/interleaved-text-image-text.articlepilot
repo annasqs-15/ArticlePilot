@@ -1,0 +1,19 @@
+@article version: 1.0
+@title
+Teks dan Gambar Berselang
+@section
+@heading
+Urutan Block
+@text
+Teks sebelum gambar.
+@end-text
+@image
+download-url: https://cdn.example.com/photo.jpg?fit=crop&v=4
+source-url: https://source.example.com/photo?id=4
+source-name: Photo Source
+credit: Photographer Name
+caption: Keterangan gambar.
+@end-image
+@text
+Teks setelah gambar.
+@end-text

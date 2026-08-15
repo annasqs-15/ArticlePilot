@@ -27,6 +27,8 @@ data class Article(
 data class ArticleMetadata(
     val title: String,
     val excerpt: String? = null,
+    val category: String? = null,
+    val tags: List<String> = emptyList(),
 )
 
 @Serializable

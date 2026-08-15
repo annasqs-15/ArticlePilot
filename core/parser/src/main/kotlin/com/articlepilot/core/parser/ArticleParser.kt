@@ -21,6 +21,8 @@ data class ParseDiagnostic(
     val line: Int?,
     val code: String,
     val message: String,
+    val column: Int? = null,
+    val path: String? = null,
 )
 
 interface ArticleFormatRegistry {
@@ -28,5 +30,6 @@ interface ArticleFormatRegistry {
 }
 
 object ArticleFormatVersions {
-    const val CURRENT = "1.0-draft"
+    const val CURRENT = "1.0"
+    val SUPPORTED: Set<String> = setOf(CURRENT)
 }

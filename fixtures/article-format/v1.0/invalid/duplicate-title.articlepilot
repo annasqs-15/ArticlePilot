@@ -1,0 +1,9 @@
+@article version: 1.0
+@title
+Judul pertama
+@title
+Judul kedua
+@section
+@text
+Isi artikel.
+@end-text

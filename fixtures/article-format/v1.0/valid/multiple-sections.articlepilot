@@ -1,0 +1,21 @@
+@article version: 1.0
+@title
+Tiga Bagian Artikel
+@section
+@heading
+Bagian Pertama
+@text
+Isi pertama.
+@end-text
+@section
+@heading
+Bagian Kedua
+@text
+Isi kedua.
+@end-text
+@section
+@heading
+Bagian Ketiga
+@text
+Isi ketiga.
+@end-text

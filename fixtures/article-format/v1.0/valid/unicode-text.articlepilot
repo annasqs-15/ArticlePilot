@@ -1,0 +1,11 @@
+@article version: 1.0
+@title
+Café, naïve, 東京, dan 한국어
+@excerpt
+Unicode tetap terbaca: déjà vu, Ελληνικά, العربية.
+@section
+@heading
+Teks lintas aksara
+@text
+Unicode text: café — 東京 — 한국어 — العربية — Ελληνικά.
+@end-text

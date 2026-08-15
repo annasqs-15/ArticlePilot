@@ -1,0 +1,19 @@
+@article version: 1.0
+@title
+Koleksi Gambar
+@section
+@image
+download-url: https://cdn.example.com/one.png
+source-url: https://source.example.com/one
+caption: Gambar pertama.
+@end-image
+@image
+download-url: https://cdn.example.com/two.png
+source-url: https://source.example.com/two
+caption: Gambar kedua.
+@end-image
+@image
+download-url: https://cdn.example.com/three.png
+source-url: https://source.example.com/three
+caption: Gambar ketiga.
+@end-image

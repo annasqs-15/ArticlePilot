@@ -1,0 +1,16 @@
+@article version: 1.0
+@title
+Artikel dengan Cover
+@cover
+download-url: https://cdn.example.com/cover.webp?width=1200&quality=85
+source-url: https://source.example.com/cover
+source-name: Example Source
+credit: A. Writer
+caption: Pemandangan pada pagi hari.
+@end-cover
+@section
+@heading
+Pembuka
+@text
+Cover berada di luar urutan block section.
+@end-text

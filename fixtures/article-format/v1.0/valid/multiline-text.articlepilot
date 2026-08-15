@@ -1,0 +1,10 @@
+@article version: 1.0
+@title
+Multiline Text
+@section
+@text
+Paragraf pertama memiliki dua kalimat.
+
+Paragraf kedua tetap berada di dalam text block yang sama.
+Baris ini melanjutkan paragraf kedua.
+@end-text

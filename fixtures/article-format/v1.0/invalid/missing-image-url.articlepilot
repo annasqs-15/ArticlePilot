@@ -1,0 +1,8 @@
+@article version: 1.0
+@title
+URL Gambar Kosong
+@section
+@image
+download-url:
+source-url: https://source.example.com/item
+@end-image

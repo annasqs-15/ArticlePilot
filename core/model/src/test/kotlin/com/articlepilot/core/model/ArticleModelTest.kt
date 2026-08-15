@@ -20,8 +20,12 @@ class ArticleModelTest {
     @Test
     fun article_preserves_ordered_sections_and_blocks() {
         val article = Article(
-            formatVersion = "1.0-draft",
-            metadata = ArticleMetadata(title = "Title"),
+            formatVersion = "1.0",
+            metadata = ArticleMetadata(
+                title = "Title",
+                category = "News",
+                tags = listOf("one", "two"),
+            ),
             sections = listOf(
                 ArticleSection(
                     id = "section-1",
@@ -30,6 +34,8 @@ class ArticleModelTest {
             ),
         )
 
+        assertEquals("News", article.metadata.category)
+        assertEquals(listOf("one", "two"), article.metadata.tags)
         assertEquals("section-1", article.sections.single().id)
         assertNotNull(article.sections.single().blocks.single() as TextBlock)
     }

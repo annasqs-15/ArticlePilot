@@ -1,0 +1,8 @@
+@article version: 1.0
+@title
+Gambar Tidak Lengkap
+@section
+@image
+source-url: https://source.example.com/item
+caption: Tidak ada download-url.
+@end-image
