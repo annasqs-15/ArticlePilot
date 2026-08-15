@@ -1,7 +1,7 @@
 package com.articlepilot.media.processor
 
 import com.articlepilot.core.model.ImageAsset
-import com.articlepilot.media.downloader.LocalMediaFile
+import com.articlepilot.media.storage.LocalMediaFile
 
 interface ImageProcessor {
     suspend fun process(asset: ImageAsset, input: LocalMediaFile, policy: ProcessingPolicy): ProcessingResult

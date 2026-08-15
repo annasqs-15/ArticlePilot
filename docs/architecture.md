@@ -44,10 +44,10 @@ Draft, revision, image metadata, publishing session, checkpoint, dan log diranca
 | Parser integration ke UI import | Parser production dan fixture sudah tersedia, tetapi composition root belum menggunakannya | Import flow memiliki dependency composition, error presentation, dan draft persistence |
 | Sintaks final ArticlePilot | Format v1.0 sudah dibekukan | Versi berikutnya memerlukan migration policy dan fixture baru |
 | Room entities/DAOs | Skema harus mendukung revision, recovery, dan cleanup | Retention policy serta migration test tersedia |
-| HTTP client final | Pipeline harus mendefinisikan redirect, timeout, size limit, dan cache | Media policy dan threat model ditetapkan |
+| Android HTTP/storage integration | JVM Media Core sudah memiliki `JvmHttpTransport` dengan redirect, timeout, retry, size limit, dan temporary storage; adapter Android belum dipilih | App-private lifecycle, cancellation, WorkManager constraints, dan threat model ditetapkan |
 | IDN Times selectors | DOM dan workflow aktual harus diverifikasi | Manual inspection dan selector fixtures tersedia |
 | WebView bridge production | Bridge perlu lifecycle, origin, message validation, dan error contract | Threat model serta integration harness tersedia |
-| WorkManager orchestration | Belum ada worker production yang aman untuk dijalankan | Retry constraints dan foreground UX ditetapkan |
+| WorkManager orchestration | Pipeline JVM belum memiliki worker Android untuk persisted resume | Retry constraints, foreground UX, dan checkpoint persistence ditetapkan |
 
 ## Struktur package
 

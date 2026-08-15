@@ -11,8 +11,9 @@ Testing ArticlePilot harus memberi keyakinan pada translator dan execution engin
 | Unit model | Article, ImageAsset, block ordering, serialization shape | Kotlin/JVM |
 | Parser fixtures | Syntax version, valid/invalid input, diagnostics | Kotlin/JVM |
 | Validator | Generic semantic rules, platform policy requirements, diagnostics/order | Kotlin/JVM |
-| Media unit | MIME, size, dimension, retry classification | Kotlin/JVM dengan fake files |
-| Media integration | Downloader, decoder, processor, cleanup | Android/instrumented atau controlled temp storage |
+| Media unit | MIME, size, dimension, checksum, retry classification | Kotlin/JVM dengan fake files dan injected transport |
+| Media integration | Downloader, decoder, processor, cleanup, state transitions | Kotlin/JVM dengan controlled temp storage |
+| Android media adapter | App-private storage, WorkManager resume, lifecycle ownership | Android/instrumented setelah adapter tersedia |
 | State machine | Entry, transition, evidence, retry, pause | Kotlin/JVM dengan fake events |
 | Persistence | Room migration, draft/revision/session/log | Android/in-memory Room |
 | Recovery | Crash/reload/expired session/resume | Kotlin/JVM contract tests |
@@ -38,7 +39,7 @@ CI menjalankan Gradle wrapper validation, unit tests, lint, dan debug assemble p
 
 ## Status tahap pertama
 
-Test kontrak model, parser result, validation result, image validation result, browser session failure, checkpoint, dan recovery boundary telah ditambahkan. Parser Article Format v1.0 diimplementasikan sebagai pure Kotlin component dan diuji melalui seluruh manifest fixture valid/invalid, structured output assertions, ordering, multiline text, Unicode, escaping, URL separation, serta diagnostic line/column/path. Generic Article Validation Engine kini juga tersedia sebagai pure Kotlin component dengan policy-aware tests untuk empty content, image metadata, severity, deterministic ordering, dan paths. Pipeline media, Room, bridge, dan state transition production belum tersedia; test untuk boundary tersebut akan ditambah bersamaan dengan implementasinya, bukan dipalsukan melalui demo.
+Test kontrak model, parser result, validation result, browser session failure, checkpoint, dan recovery boundary telah ditambahkan. Parser Article Format v1.0 diimplementasikan sebagai pure Kotlin component dan diuji melalui seluruh manifest fixture valid/invalid, structured output assertions, ordering, multiline text, Unicode, escaping, URL separation, serta diagnostic line/column/path. Generic Article Validation Engine tersedia sebagai pure Kotlin component dengan policy-aware tests untuk empty content, image metadata, severity, deterministic ordering, dan paths. Media Core kini memiliki JVM tests untuk storage lifecycle, SHA-256 file facts, streaming download limits, retry/backoff, HTTP failure, cancellation cleanup, MIME sniffing, bounded decode, dimensions, MIME mismatch, WebP header inspection, validation policy, pipeline state transitions, promotion, validation cleanup, dan observer snapshots. Room persistence, Android storage adapter, WorkManager resume, compression, WebView bridge, dan live platform integration masih future boundaries; test untuk boundary tersebut akan ditambah bersamaan dengan implementasinya, bukan dipalsukan melalui demo.
 
 ## Referensi
 

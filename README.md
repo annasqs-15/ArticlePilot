@@ -6,7 +6,7 @@ ArticlePilot adalah aplikasi Android yang menjadi **translator dan execution eng
 
 ## Status proyek
 
-Repositori ini adalah **fondasi produksi tahap pertama**, bukan MVP atau demo throwaway. Model domain, parser Article Format v1.0, generic validation engine, boundary modul, kontrak parser/validator/media/browser/automation, struktur persistence, dokumentasi, dan pengujian kontrak telah dibuat. Room schema, image pipeline nyata, WebView bridge produksi, selector IDN Times terverifikasi, dan automation runner produksi sengaja belum diaktifkan karena boundary platform tersebut belum diverifikasi.
+Repositori ini adalah **fondasi produksi tahap pertama**, bukan MVP atau demo throwaway. Model domain, parser Article Format v1.0, generic validation engine, Media Core image pipeline JVM, boundary modul, kontrak parser/validator/media/browser/automation, struktur persistence, dokumentasi, dan pengujian kontrak telah dibuat. Room schema, Android storage adapter, WorkManager orchestration, image compression, WebView bridge produksi, selector IDN Times terverifikasi, dan automation runner produksi sengaja belum diaktifkan karena boundary platform tersebut belum diverifikasi.
 
 | Area | Status tahap pertama |
 | --- | --- |
@@ -14,7 +14,7 @@ Repositori ini adalah **fondasi produksi tahap pertama**, bukan MVP atau demo th
 | Core article model | Tersedia dan extensible |
 | Parser | Parser pure Kotlin Article Format v1.0 dan fixture-driven tests tersedia |
 | Validation | Generic Article Validation Engine, policy requirements, severity, dan deterministic diagnostics tersedia |
-| Image pipeline | Boundary downloader/validator/processor tersedia; pipeline nyata belum aktif |
+| Image pipeline | Controlled downloader, temporary/ready storage, MIME/dimension inspection, validator, retry, state, cleanup, dan pipeline tests tersedia |
 | Persistence | Boundary draft/revision/session/log tersedia; Room schema belum disetujui |
 | Browser/WebView | Adapter boundary tersedia; tidak ada fake automation |
 | Automation state/recovery | Checkpoint, state, recovery contracts, dan manual takeover boundary tersedia |
@@ -57,7 +57,7 @@ Untuk IDE, buka root repository sebagai proyek Gradle. Jangan menyimpan `local.p
 | `core/parser/` | Parser v1.0, kontrak versioned, diagnostics, dan fixture-driven tests |
 | `core/validator/` | Validation policy, diagnostics, dan severity |
 | `core/database/` | Boundary persistence lokal berbasis Room |
-| `media/` | Downloader, processor, dan validator media |
+| `media/` | Storage, controlled downloader, byte/image inspection, validator, processor pipeline, dan media tests |
 | `browser/` | Browser session, WebView adapter, dan bridge |
 | `automation/` | State machine, runner, profile, selector, dan recovery |
 | `docs/` | Keputusan arsitektur dan spesifikasi evolutif |
@@ -69,7 +69,7 @@ Implementasi production berikutnya harus mempertahankan beberapa batas. Kegagala
 
 ## Langkah implementasi berikutnya
 
-Langkah berikut yang paling tepat adalah menurunkan skema Room dan lifecycle temporary media dari model yang sudah tersedia, lalu menambahkan Media Core untuk validasi MIME, dimensi, ukuran, dan retry tanpa mencampurkannya ke article validator. Selector serta profile IDN Times baru boleh diisi setelah workflow editor dan DOM aktual diverifikasi secara manual, tanpa melewati mekanisme keamanan platform.
+Langkah berikut yang paling tepat adalah menambahkan Android storage adapter dan WorkManager-backed persistence untuk resume lifecycle media, lalu menurunkan skema Room dari publishing session. Setelah itu, image compression policy, browser handoff, dan selector profile IDN Times dapat dikerjakan sebagai boundary terpisah setelah workflow editor dan DOM aktual diverifikasi secara manual, tanpa melewati mekanisme keamanan platform.
 
 ## Referensi teknis
 
