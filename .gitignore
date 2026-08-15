@@ -1,0 +1,30 @@
+# Gradle
+.gradle/
+**/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Android Studio
+.idea/
+*.iml
+.externalNativeBuild/
+.cxx/
+local.properties
+
+# Signing and secrets
+*.jks
+*.keystore
+*.p12
+.env
+.env.*
+
+# Local and temporary media
+captures/
+*.apk
+*.aab
+*.hprof
+media-cache/
+articlepilot-local/
+
+# OS/editor
+.DS_Store
+Thumbs.db

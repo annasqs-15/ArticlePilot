@@ -1,0 +1,59 @@
+# ArticlePilot Architecture
+
+## Tujuan
+
+ArticlePilot dirancang sebagai aplikasi Android lokal yang menerjemahkan dokumen artikel terstruktur menjadi proses publishing yang dapat diverifikasi. Arsitektur ini memisahkan domain article dari media, browser, automation, persistence, dan UI agar perubahan pada sintaks artikel atau DOM IDN Times tidak memaksa penulisan ulang model internal.
+
+## Batas modul
+
+| Layer | Modul | Tanggung jawab utama | Tidak boleh mengetahui |
+| --- | --- | --- | --- |
+| Presentation | `app` | Compose entry point, dependency composition, navigasi UI | Detail selector dan HTTP download |
+| Domain | `core:model` | Article, section, block, image asset, draft, publishing session | Android View, WebView, IDN Times DOM |
+| Translation | `core:parser` | Memetakan input versioned ke Article atau diagnostics | DOM platform |
+| Rules | `core:validator` | Menjalankan validation policy dan mengembalikan issues | Detail UI dan mekanisme download |
+| Persistence | `core:database` | Adapter Room untuk draft, revision, session, log | Selector browser |
+| Media | `media:*` | Download, decode/processing, validation, lifecycle file | Browser action |
+| Browser | `browser:*` | WebView lifecycle, session observation, JS bridge | Article parsing rules |
+| Automation | `automation:*` | State machine, profile, semantic selectors, retry/recovery | Raw Compose state |
+
+Dependency direction mengalir dari adapter ke kontrak yang lebih stabil. `core:model` menjadi pusat data, sementara `automation:profiles` menggabungkan policy dan selector platform. Dengan demikian, IDN Times-specific logic tidak tersebar di parser atau UI.
+
+## Keputusan penting
+
+### Model internal tidak mengikuti sintaks input
+
+Format artikel adalah boundary eksternal yang berversi. Parser mengembalikan `Article`, sedangkan format registry memilih parser berdasarkan version. Penambahan block type atau revisi sintaks harus menambah parser/translator dan migration policy, bukan mengubah automation DOM logic.
+
+### Browser automation berbasis evidence
+
+Sistem tidak menggunakan tap berdasarkan koordinat sebagai mekanisme utama. Perintah browser diwujudkan sebagai semantic selector dan verified action. Aksi dianggap berhasil hanya setelah inspeksi menunjukkan evidence yang diharapkan. `UnimplementedAutomationRunner` sengaja pause daripada membuat kesan bahwa workflow IDN Times sudah aman.
+
+### Platform policy diisolasi
+
+Aturan generik artikel dan aturan platform tidak dicampur. `ValidationPolicy` adalah kontrak; profile platform nantinya menyuplai implementation ber-version. Selector catalog juga ber-version agar perubahan DOM dapat dikaji, diuji dengan fixture, dan diganti tanpa mengubah domain.
+
+### Persistence lokal dan privacy
+
+Draft, revision, image metadata, publishing session, checkpoint, dan log dirancang untuk disimpan lokal. Credential, cookie, dan file sementara tidak boleh masuk Git atau dikirim ke backend ArticlePilot. Room schema belum dibekukan dalam tahap ini karena perlu dipetakan terhadap kebutuhan migration dan cleanup lifecycle.
+
+## Keputusan yang sengaja ditunda
+
+| Keputusan | Alasan ditunda | Kriteria untuk melanjutkan |
+| --- | --- | --- |
+| Sintaks final ArticlePilot | Prompt menyatakan format belum final | Format `1.0` disepakati dan memiliki fixture valid/invalid |
+| Room entities/DAOs | Skema harus mendukung revision, recovery, dan cleanup | Retention policy serta migration test tersedia |
+| HTTP client final | Pipeline harus mendefinisikan redirect, timeout, size limit, dan cache | Media policy dan threat model ditetapkan |
+| IDN Times selectors | DOM dan workflow aktual harus diverifikasi | Manual inspection dan selector fixtures tersedia |
+| WebView bridge production | Bridge perlu lifecycle, origin, message validation, dan error contract | Threat model serta integration harness tersedia |
+| WorkManager orchestration | Belum ada worker production yang aman untuk dijalankan | Retry constraints dan foreground UX ditetapkan |
+
+## Struktur package
+
+Package mengikuti modul, bukan screen atau vendor. `com.articlepilot.core.model` tidak mengimpor Android. Modul Android hanya digunakan ketika boundary memang membutuhkan WebView, Room runtime, atau Compose. Kontrak dapat diuji pada JVM sehingga sebagian besar test tidak memerlukan device maupun situs live.
+
+## Referensi
+
+[1]: https://developer.android.com/topic/architecture "Android app architecture guidance"
+[2]: https://developer.android.com/training/data-storage/room "Room persistence library documentation"
+[3]: https://developer.android.com/develop/ui/views/layout/webapps/webview "Android WebView documentation"
