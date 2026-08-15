@@ -10,7 +10,7 @@ Testing ArticlePilot harus memberi keyakinan pada translator dan execution engin
 | --- | --- | --- |
 | Unit model | Article, ImageAsset, block ordering, serialization shape | Kotlin/JVM |
 | Parser fixtures | Syntax version, valid/invalid input, diagnostics | Kotlin/JVM |
-| Validator | Generic policy dan platform policy | Kotlin/JVM |
+| Validator | Generic semantic rules, platform policy requirements, diagnostics/order | Kotlin/JVM |
 | Media unit | MIME, size, dimension, retry classification | Kotlin/JVM dengan fake files |
 | Media integration | Downloader, decoder, processor, cleanup | Android/instrumented atau controlled temp storage |
 | State machine | Entry, transition, evidence, retry, pause | Kotlin/JVM dengan fake events |
@@ -38,7 +38,7 @@ CI menjalankan Gradle wrapper validation, unit tests, lint, dan debug assemble p
 
 ## Status tahap pertama
 
-Test kontrak model, parser result, validation result, image validation result, browser session failure, checkpoint, dan recovery boundary telah ditambahkan. Parser Article Format v1.0 kini diimplementasikan sebagai pure Kotlin component dan diuji melalui seluruh manifest fixture valid/invalid, structured output assertions, ordering, multiline text, Unicode, escaping, URL separation, serta diagnostic line/column/path. Pipeline media, Room, bridge, dan state transition production belum tersedia; test untuk boundary tersebut akan ditambah bersamaan dengan implementasinya, bukan dipalsukan melalui demo.
+Test kontrak model, parser result, validation result, image validation result, browser session failure, checkpoint, dan recovery boundary telah ditambahkan. Parser Article Format v1.0 diimplementasikan sebagai pure Kotlin component dan diuji melalui seluruh manifest fixture valid/invalid, structured output assertions, ordering, multiline text, Unicode, escaping, URL separation, serta diagnostic line/column/path. Generic Article Validation Engine kini juga tersedia sebagai pure Kotlin component dengan policy-aware tests untuk empty content, image metadata, severity, deterministic ordering, dan paths. Pipeline media, Room, bridge, dan state transition production belum tersedia; test untuk boundary tersebut akan ditambah bersamaan dengan implementasinya, bukan dipalsukan melalui demo.
 
 ## Referensi
 

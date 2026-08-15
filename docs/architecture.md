@@ -11,7 +11,7 @@ ArticlePilot dirancang sebagai aplikasi Android lokal yang menerjemahkan dokumen
 | Presentation | `app` | Compose entry point, dependency composition, navigasi UI | Detail selector dan HTTP download |
 | Domain | `core:model` | Article, section, block, image asset, draft, publishing session | Android View, WebView, IDN Times DOM |
 | Translation | `core:parser` | Memetakan input versioned ke Article atau diagnostics | DOM platform |
-| Rules | `core:validator` | Menjalankan validation policy dan mengembalikan issues | Detail UI dan mekanisme download |
+| Rules | `core:validator` | `ArticleValidationEngine` menjalankan generic semantic rules, policy requirements, dan mengembalikan issues deterministik | Detail UI, parser source text, dan mekanisme download |
 | Persistence | `core:database` | Adapter Room untuk draft, revision, session, log | Selector browser |
 | Media | `media:*` | Download, decode/processing, validation, lifecycle file | Browser action |
 | Browser | `browser:*` | WebView lifecycle, session observation, JS bridge | Article parsing rules |
@@ -31,7 +31,7 @@ Sistem tidak menggunakan tap berdasarkan koordinat sebagai mekanisme utama. Peri
 
 ### Platform policy diisolasi
 
-Aturan generik artikel dan aturan platform tidak dicampur. `ValidationPolicy` adalah kontrak; profile platform nantinya menyuplai implementation ber-version. Selector catalog juga ber-version agar perubahan DOM dapat dikaji, diuji dengan fixture, dan diganti tanpa mengubah domain.
+Aturan generik artikel dan aturan platform tidak dicampur. `ValidationPolicy` adalah kontrak; `ArticleValidationEngine` menjalankan aturan generic lalu hook policy secara deterministik. Profile platform nantinya menyuplai implementation ber-version, termasuk kebutuhan attribution dan fakta media yang harus tersedia. Selector catalog juga ber-version agar perubahan DOM dapat dikaji, diuji dengan fixture, dan diganti tanpa mengubah domain.
 
 ### Persistence lokal dan privacy
 
@@ -41,7 +41,8 @@ Draft, revision, image metadata, publishing session, checkpoint, dan log diranca
 
 | Keputusan | Alasan ditunda | Kriteria untuk melanjutkan |
 | --- | --- | --- |
-| Sintaks final ArticlePilot | Prompt menyatakan format belum final | Format `1.0` disepakati dan memiliki fixture valid/invalid |
+| Parser integration ke UI import | Parser production dan fixture sudah tersedia, tetapi composition root belum menggunakannya | Import flow memiliki dependency composition, error presentation, dan draft persistence |
+| Sintaks final ArticlePilot | Format v1.0 sudah dibekukan | Versi berikutnya memerlukan migration policy dan fixture baru |
 | Room entities/DAOs | Skema harus mendukung revision, recovery, dan cleanup | Retention policy serta migration test tersedia |
 | HTTP client final | Pipeline harus mendefinisikan redirect, timeout, size limit, dan cache | Media policy dan threat model ditetapkan |
 | IDN Times selectors | DOM dan workflow aktual harus diverifikasi | Manual inspection dan selector fixtures tersedia |

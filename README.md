@@ -6,14 +6,14 @@ ArticlePilot adalah aplikasi Android yang menjadi **translator dan execution eng
 
 ## Status proyek
 
-Repositori ini adalah **fondasi produksi tahap pertama**, bukan MVP atau demo throwaway. Model domain, parser Article Format v1.0, boundary modul, kontrak parser/validator/media/browser/automation, struktur persistence, dokumentasi, dan pengujian kontrak telah dibuat. Room schema, image pipeline nyata, WebView bridge produksi, selector IDN Times terverifikasi, dan automation runner produksi sengaja belum diaktifkan karena boundary platform tersebut belum diverifikasi.
+Repositori ini adalah **fondasi produksi tahap pertama**, bukan MVP atau demo throwaway. Model domain, parser Article Format v1.0, generic validation engine, boundary modul, kontrak parser/validator/media/browser/automation, struktur persistence, dokumentasi, dan pengujian kontrak telah dibuat. Room schema, image pipeline nyata, WebView bridge produksi, selector IDN Times terverifikasi, dan automation runner produksi sengaja belum diaktifkan karena boundary platform tersebut belum diverifikasi.
 
 | Area | Status tahap pertama |
 | --- | --- |
 | Android Compose application shell | Tersedia sebagai composition root minimal |
 | Core article model | Tersedia dan extensible |
 | Parser | Parser pure Kotlin Article Format v1.0 dan fixture-driven tests tersedia |
-| Validation | Kontrak policy dan diagnostic tersedia |
+| Validation | Generic Article Validation Engine, policy requirements, severity, dan deterministic diagnostics tersedia |
 | Image pipeline | Boundary downloader/validator/processor tersedia; pipeline nyata belum aktif |
 | Persistence | Boundary draft/revision/session/log tersedia; Room schema belum disetujui |
 | Browser/WebView | Adapter boundary tersedia; tidak ada fake automation |
@@ -69,7 +69,7 @@ Implementasi production berikutnya harus mempertahankan beberapa batas. Kegagala
 
 ## Langkah implementasi berikutnya
 
-Langkah berikut yang paling tepat adalah menurunkan validator generik ArticlePilot dari model dan hasil parser v1.0, termasuk aturan section kosong serta kebijakan metadata platform. Setelah itu, skema Room dan lifecycle temporary media dapat diturunkan dari model yang sudah tersedia. Selector serta profile IDN Times baru boleh diisi setelah workflow editor dan DOM aktual diverifikasi secara manual, tanpa melewati mekanisme keamanan platform.
+Langkah berikut yang paling tepat adalah menurunkan skema Room dan lifecycle temporary media dari model yang sudah tersedia, lalu menambahkan Media Core untuk validasi MIME, dimensi, ukuran, dan retry tanpa mencampurkannya ke article validator. Selector serta profile IDN Times baru boleh diisi setelah workflow editor dan DOM aktual diverifikasi secara manual, tanpa melewati mekanisme keamanan platform.
 
 ## Referensi teknis
 
