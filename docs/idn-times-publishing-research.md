@@ -4,13 +4,13 @@
 **Dokumen:** Spesifikasi riset workflow publishing IDN Times Community
 **Penulis:** Manus AI
 **Tanggal riset:** 16 Agustus 2026
-**Status:** Research-only specification; tidak ada browser automation yang diimplementasikan
+**Status:** Research-only specification; tidak ada production browser automation yang diimplementasikan. Task 08 melakukan reconnaissance pasif terbatas melalui konektor Playwright.
 
 ## 1. Executive summary
 
 Task ini meneliti workflow publikasi yang secara eksplisit didokumentasikan oleh IDN Times dan IDN Media Support, kemudian membandingkannya dengan fondasi ArticlePilot yang telah tersedia. Kesimpulan paling kuat adalah bahwa proses contributor bukan publikasi langsung: penulis menyiapkan dan mengirim artikel melalui IDN Times Community atau entry point IDN App, lalu artikel masuk ke moderasi dan penyuntingan editor sebelum dapat terbit.[1] [9] [10]
 
-Dokumentasi publik yang dapat diakses menjelaskan konsep utama workflow: penulis memiliki akun, membuka entry point menulis, mengisi metadata dan isi, mengunggah cover serta gambar dalam artikel, menyertakan sumber gambar, dapat menyimpan draft, lalu mengirimkan tulisan ke editorial.[2] [3] [4] Namun, sebagian detail antarmuka yang paling penting bagi automation—DOM saat ini, editor type, selector, autosave, mekanisme upload yang berjalan saat ini, serta dialog konfirmasi submit—tidak dapat dikonfirmasi tanpa akses dashboard contributor yang terautentikasi. Dashboard publik tidak dapat diamati secara pasif dalam lingkungan riset ini; tidak ada login, pengiriman credential, CAPTCHA, MFA/OTP, atau security challenge yang dicoba.
+Dokumentasi publik yang dapat diakses menjelaskan konsep utama workflow: penulis memiliki akun, membuka entry point menulis, mengisi metadata dan isi, mengunggah cover serta gambar dalam artikel, menyertakan sumber gambar, dapat menyimpan draft, lalu mengirimkan tulisan ke editorial.[2] [3] [4] Task 08 menambahkan probe pasif melalui konektor Playwright dan file sesi yang disediakan pengguna, tetapi sesi tersebut belum terbukti authenticated: halaman settle kembali ke public shell dengan tombol `Masuk/Daftar`, dan endpoint layout authenticated mengembalikan `401`.[12] Karena itu, sebagian detail antarmuka yang paling penting bagi automation—DOM editor current, editor type, selector, autosave, mekanisme upload current, serta dialog konfirmasi submit—tetap tidak dapat dikonfirmasi. Tidak ada login form, credential, CAPTCHA, MFA/OTP, atau security challenge yang diisi atau dibypass.
 
 State moderation yang didukung dokumentasi support adalah **Draft**, **Dimoderasi**, **Revisi**, **Terbit**, dan **Ditolak**.[5] FAQ lain menjelaskan bahwa artikel yang disubmit dimoderasi terlebih dahulu, dan tulisan yang memenuhi ketentuan dapat terbit dalam waktu kurang dari tujuh hari menurut panduan yang dipublikasikan.[6] Angka tersebut harus diperlakukan sebagai guidance historis, bukan SLA. ArticlePilot tidak boleh menganggap submit sebagai published; automation masa depan harus memverifikasi status eksternal secara terpisah.
 
@@ -45,8 +45,9 @@ Klasifikasi fakta dalam dokumen ini adalah sebagai berikut.
 | [9] | [FAQ: Apa itu Community Writer?][9] | Definisi contributor dan moderasi/penyuntingan sebelum publikasi. | Official support FAQ. |
 | [10] | [FAQ: Bagaimana Cara Menjadi Community Writer di IDN Times Community?][10] | IDN App account, menu `Tulis Berita`, dan `Menu Kreator`. | Official support FAQ; entry point contributor paling eksplisit yang ditemukan. |
 | [11] | [IDN Connect user guide: IDN Points][11] | Candidate current IDN Connect user guide yang ditemukan, tetapi halaman hanya merender loading shell saat diuji. | Candidate source; tidak dipakai untuk menetapkan UI atau workflow. |
+| [12] | [Sanitized Task 08 Playwright reconnaissance observations][12] | Evidence lokal tentang public shell, session probe, dashboard/page shell routes, dan API status; tidak mengandung cookie atau data akun. | Project-local observation; authenticated state tidak terkonfirmasi. |
 
-> **Catatan akses:** `community.idntimes.com/dashboard/` tidak dapat dinavigasi dalam sandbox karena policy restriction. Tidak ada upaya untuk mengganti akses tersebut dengan login, mengambil credential, atau melewati challenge. Karena itu, observasi current authenticated editor tidak tersedia.
+> **Catatan akses:** Task 08 membuka `https://community.idntimes.com/dashboard/` melalui Playwright dan menerapkan tiga assignment `document.cookie` dari file sesi secara terbatas pada konteks IDN. Initial title sempat menjadi `Manage Article Community | IDN Times`, tetapi setelah settle accessibility snapshot kembali menampilkan public shell dengan tombol `Masuk/Daftar`; request `/api/community/layout?...slug=dashboard-notifications` juga mengembalikan `401`. Route RSC `manage-article`, `events`, dan `guidelines` beberapa kali mengembalikan `200`, tetapi page shell `200` tidak membuktikan authenticated permission. Nilai cookie, credential, request body, dan data akun tidak disimpan. Karena session authenticated belum terverifikasi, current editor tidak boleh dianggap terobservasi.[12]
 
 ## 4. Human publishing workflow
 
@@ -83,8 +84,11 @@ Bukti publik yang paling jelas menyatakan bahwa contributor perlu membuat akun I
 | MFA/OTP | Tidak terlihat dan tidak didokumentasikan oleh sumber yang dikonsultasikan. | **UNKNOWN** |
 | CAPTCHA/anti-bot | Tidak diperiksa dan tidak boleh dibypass. Jika muncul, future automation harus pause. | **UNKNOWN / safety boundary** |
 | Credential storage | Tidak boleh ditangani ArticlePilot backend; autentikasi harus tetap pada user-controlled browser/session. | **INFERRED architecture constraint** |
+| Playwright session probe | Tiga assignment cookie diproses secara terbatas; public shell tetap menampilkan `Masuk/Daftar` dan layout API mengembalikan `401`. | **CONFIRMED observation; authenticated state NOT CONFIRMED** [12] |
+| Dashboard/page shell | `/dashboard` sempat memberi title `Manage Article Community | IDN Times`; route RSC `manage-article`, `events`, dan `guidelines` terlihat `200`. | **CONFIRMED observation; content/permission UNKNOWN** [12] |
+| Security challenge | Tidak ada CAPTCHA, MFA, OTP, atau suspicious-login marker yang terlihat selama probe terbatas. | **CONFIRMED negative observation for this probe; future appearance UNKNOWN** [12] |
 
-Konsekuensi engineering-nya adalah login harus menjadi **manual user-controlled step** pada fase awal Browser Core. ArticlePilot boleh mendeteksi halaman login atau session expiry, tetapi tidak boleh mengumpulkan password, mengisi credential secara otomatis, menyimpan token, atau melewati challenge keamanan.
+Konsekuensi engineering-nya adalah login harus menjadi **manual user-controlled step** pada fase awal Browser Core. ArticlePilot boleh mendeteksi halaman login atau session expiry, tetapi tidak boleh mengumpulkan password, mengisi credential secara otomatis, menyimpan token, atau melewati challenge keamanan. Jika sesi yang diberikan tidak menghasilkan authenticated evidence, automation harus berhenti pada `CHECK_SESSION` dan tidak boleh membuka editor atau mengirim artikel.
 
 ## 6. Article field mapping
 
@@ -164,7 +168,7 @@ Sumber historical mendeskripsikan dashboard dengan entry penulisan, field metada
 | Navigation between fields | Urutan form dideskripsikan secara konseptual, bukan keyboard/DOM behavior. | **UNKNOWN** |
 | Current accessibility names/test IDs | Tidak tersedia. | **UNKNOWN** |
 
-Maka, `automation:selectors` ArticlePilot tidak boleh diisi berdasarkan label historical semata. Selector profile harus memiliki version, target semantic, dan fixture evidence dari observasi current yang dikendalikan.
+Maka, `automation:selectors` ArticlePilot tidak boleh diisi berdasarkan label historical semata. Task 08 juga belum menghasilkan selector editor: snapshot yang berhasil diambil masih merupakan public Community shell, bukan authenticated editor. Selector profile harus memiliki version, target semantic, dan fixture evidence dari observasi current yang dikendalikan.
 
 ## 9. Draft, submission, dan moderation behavior
 
@@ -325,15 +329,15 @@ The following questions remain explicitly open and must not be turned into selec
 
 ## 14. Recommended next engineering task
 
-The next task should be **Controlled Authenticated Reconnaissance and Evidence Capture**, not production browser automation. The user should manually open the current contributor editor in a user-controlled authenticated browser/session. ArticlePilot should not request or store credentials. The session should be used only to record a human-observed workflow checklist and sanitized local HTML/screenshot fixtures where permitted.
+Task 08 telah menjalankan **Controlled Authenticated Reconnaissance and Evidence Capture** melalui konektor Playwright, tetapi tidak berhasil memverifikasi authenticated contributor session. Next task tetap harus berupa reconnaissance terkontrol dengan sesi Playwright yang valid dan current, bukan production browser automation. Jika diperlukan, pengguna harus melakukan manual takeover pada halaman login di konteks Playwright; ArticlePilot tidak boleh meminta atau menyimpan password, token, atau cookie secara permanen.
 
-The evidence capture task should answer the open questions in a controlled order: current entry point, authentication result, editor field inventory, image upload dialog, insertion position, draft persistence, submit transition, and moderation status representation. Each observation should record timestamp, URL/page class, visible semantic label, action, result, and whether the result persisted after reload. Sensitive values, cookies, tokens, and personal information must be excluded from fixtures.
+Reconnaissance berikutnya harus menjawab pertanyaan yang belum tertutup dalam urutan terkontrol: hasil authentication, current editor field inventory, image upload dialog, insertion position, draft persistence, submit transition, dan moderation status representation. Setiap observasi harus mencatat timestamp, URL/page class, visible semantic label, action, result, dan apakah hasil bertahan setelah reload. Sensitive values, cookies, tokens, dan personal information harus dikeluarkan dari fixture.
 
-Only after that evidence is reviewed should ArticlePilot implement a versioned `PublishingProfile`, selector definitions, local HTML integration fixtures, and a browser state-machine adapter. The profile should initially support manual takeover for any unknown state. No live submission should be used as a routine test, and no CAPTCHA or anti-bot mechanism should be automated or bypassed.
+Hanya setelah authenticated evidence tersedia dan direview, ArticlePilot boleh mengimplementasikan versioned `PublishingProfile`, selector definitions, local HTML integration fixtures, dan browser state-machine adapter. Profile harus memulai dengan manual takeover untuk setiap unknown state. Tidak ada live submission yang boleh digunakan sebagai routine test, dan tidak ada CAPTCHA atau anti-bot mechanism yang boleh diotomasi atau dibypass.
 
 ## 15. Documentation and implementation boundary for this task
 
-This task intentionally makes no production code changes. It adds only this research specification and the temporary local research notes used during synthesis; the temporary notes should not be committed as the source of truth. No WebView, JavaScript bridge implementation, DOM selector, coordinate click, login automation, credential storage, CAPTCHA bypass, anti-bot bypass, or automatic publishing was added.
+This task intentionally makes no production code changes. It adds this research specification and a sanitized observation record at `docs/idn-times-recon-task08-observations.md`; the temporary local research notes used during synthesis were not committed as source of truth. No WebView, JavaScript bridge implementation, DOM selector, coordinate click, login automation, credential storage, CAPTCHA bypass, anti-bot bypass, or automatic publishing was added. Playwright was used only for passive reconnaissance and limited session probing.
 
 The source of truth for future Browser Automation design is this document together with `docs/automation.md`, `docs/recovery.md`, `docs/architecture.md`, and the existing browser/automation contracts. Where this document says **UNKNOWN**, ArticlePilot must pause at implementation time rather than invent behavior.
 
@@ -360,3 +364,5 @@ The source of truth for future Browser Automation design is this document togeth
 [10]: https://idnmediasupport.zendesk.com/hc/en-us/articles/18332891131929--FAQ-Community-Bagaimana-Cara-Menjadi-Community-Writer-di-IDN-Times-Community "FAQ Community: Bagaimana Cara Menjadi Community Writer di IDN Times Community?"
 
 [11]: https://connect.idn.media/my-account/user-guide/points "IDN Connect: IDN Points user guide"
+
+[12]: ./idn-times-recon-task08-observations.md "ArticlePilot Task 08 sanitized Playwright reconnaissance observations"
