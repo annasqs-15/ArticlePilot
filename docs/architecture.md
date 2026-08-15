@@ -37,6 +37,10 @@ Aturan generik artikel dan aturan platform tidak dicampur. `ValidationPolicy` ad
 
 Draft, revision, image metadata, publishing session, checkpoint, dan log dirancang untuk disimpan lokal. Credential, cookie, dan file sementara tidak boleh masuk Git atau dikirim ke backend ArticlePilot. Room schema belum dibekukan dalam tahap ini karena perlu dipetakan terhadap kebutuhan migration dan cleanup lifecycle.
 
+### Browser/session Android
+
+`browser:session` memuat kontrak JVM, origin policy, profile IDN Times, classifier authentication berbasis evidence, serta bootstrap contract tanpa credential material. `browser:webview` menjadi Android adapter yang mengelola `WebView` lifecycle, navigasi, inspeksi DOM terbatas, dan `AndroidBrowserSession`. `app/browser` hanya mengorkestrasi state ke Compose. `AUTHENTICATED` tidak dapat berasal dari HTTP 200, title, atau keberhasilan dispatch navigasi; marker current authenticated editor harus lebih dahulu diamati dan disetujui. `SafeInspectionBrowserBridge` menolak mutation sehingga fondasi ini tidak berpura-pura menjadi publishing automation.
+
 ## Keputusan yang sengaja ditunda
 
 | Keputusan | Alasan ditunda | Kriteria untuk melanjutkan |
@@ -46,8 +50,9 @@ Draft, revision, image metadata, publishing session, checkpoint, dan log diranca
 | Room entities/DAOs | Skema harus mendukung revision, recovery, dan cleanup | Retention policy serta migration test tersedia |
 | Android HTTP/storage integration | JVM Media Core sudah memiliki `JvmHttpTransport` dengan redirect, timeout, retry, size limit, dan temporary storage; adapter Android belum dipilih | App-private lifecycle, cancellation, WorkManager constraints, dan threat model ditetapkan |
 | IDN Times selectors | DOM dan workflow aktual harus diverifikasi | Manual inspection dan selector fixtures tersedia |
-| WebView bridge production | Bridge perlu lifecycle, origin, message validation, dan error contract | Threat model serta integration harness tersedia |
+| WebView bridge production | Bridge perlu lifecycle, origin, message validation, dan error contract | Inspection bridge sekarang tersedia; mutation tetap disabled sampai authenticated editor evidence dan fixture direview |
 | WorkManager orchestration | Pipeline JVM belum memiliki worker Android untuk persisted resume | Retry constraints, foreground UX, dan checkpoint persistence ditetapkan |
+| Reusable IDN Times session bootstrap | Mekanisme session current belum terbukti dan credential tidak boleh ditebak | Evidence session mechanism, Keystore/session-only threat model, dan manual verification tersedia |
 
 ## Struktur package
 

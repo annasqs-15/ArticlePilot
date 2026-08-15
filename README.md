@@ -6,7 +6,7 @@ ArticlePilot adalah aplikasi Android yang menjadi **translator dan execution eng
 
 ## Status proyek
 
-Repositori ini adalah **fondasi produksi bertahap**, bukan MVP atau demo throwaway. Model domain, parser Article Format v1.0, generic validation engine, Media Core image pipeline JVM, Article Workspace Android, boundary modul, kontrak parser/validator/media/browser/automation, dokumentasi, dan pengujian deterministik telah dibuat. Room schema, Android storage adapter, WorkManager orchestration, image compression, WebView bridge produksi, selector IDN Times terverifikasi, dan automation runner produksi sengaja belum diaktifkan karena boundary platform tersebut belum diverifikasi.
+Repositori ini adalah **fondasi produksi bertahap**, bukan MVP atau demo throwaway. Model domain, parser Article Format v1.0, generic validation engine, Media Core image pipeline JVM, Article Workspace Android, kontrak parser/validator/media/browser/automation, dokumentasi, dan pengujian deterministik telah dibuat. Fondasi Android WebView/session kini tersedia untuk membuka `https://community.idntimes.com/dashboard/create-article`, membatasi origin, melakukan inspeksi sanitized, dan menampilkan login/manual takeover state. Room schema, Android storage adapter, WorkManager orchestration, image compression, authenticated selector IDN Times terverifikasi, dan automation runner produksi sengaja belum diaktifkan karena boundary platform tersebut belum diverifikasi.
 
 | Area | Status tahap pertama |
 | --- | --- |
@@ -16,9 +16,9 @@ Repositori ini adalah **fondasi produksi bertahap**, bukan MVP atau demo throwaw
 | Validation | Generic Article Validation Engine, policy requirements, severity, dan deterministic diagnostics tersedia |
 | Image pipeline | Controlled downloader, temporary/ready storage, MIME/dimension inspection, validator, retry, state, cleanup, pipeline tests, dan integrasi workspace tersedia |
 | Persistence | Boundary draft/revision/session/log tersedia; Room schema belum disetujui |
-| Browser/WebView | Adapter boundary tersedia; tidak ada fake automation |
+| Browser/WebView | Android WebView host/session, origin policy, sanitized inspection, manual-login fallback, dan UI state tersedia; authenticated editor belum terverifikasi |
 | Automation state/recovery | Checkpoint, state, recovery contracts, dan manual takeover boundary tersedia |
-| IDN Times profile/selectors | Belum dikonfigurasi; selector tidak boleh ditebak |
+| IDN Times profile/selectors | Entry-point/origin profile tersedia; authenticated/editor markers dan selectors tetap kosong sampai current evidence direview |
 | CI | Workflow build/test/lint disiapkan |
 
 ## Arsitektur ringkas
@@ -32,13 +32,15 @@ app (Compose UI / composition root)
  ├── media:*          (download, processing, validation contracts)
  ├── browser:*        (session, WebView adapter, JS bridge)
  └── automation:*     (state, engine, profiles, selectors, recovery)
+
+browser:webview menggunakan Android WebView sebagai adapter lifecycle. `browser:session` tetap platform-neutral untuk classifier dan origin policy. `app/browser` menerjemahkan `BrowserSessionState` ke UI tanpa menjalankan DOM atau JavaScript dari Compose.
 ```
 
 Dependency direction dijaga dari domain ke adapter. Model artikel tidak mengetahui DOM, WebView, selector, atau kredensial. Profil platform adalah tempat bagi aturan IDN Times yang dapat berubah. Automation state machine bekerja dengan checkpoint dan bukti, bukan koordinat layar atau asumsi bahwa dispatch aksi berarti aksi berhasil.
 
 ## Setup pengembangan
 
-Gunakan JDK 17 atau kompatibel dengan Android Gradle Plugin yang dikunci di root build. Android SDK dengan Android API 35 dan Build Tools yang sesuai diperlukan untuk modul aplikasi serta modul Android library. Setelah SDK tersedia, jalankan pemeriksaan berikut dari root repository:
+Gunakan JDK 21 atau kompatibel dengan Android Gradle Plugin yang dikunci di root build. Android SDK dengan Android API 35 dan Build Tools yang sesuai diperlukan untuk modul aplikasi serta modul Android library. Setelah SDK tersedia, jalankan pemeriksaan berikut dari root repository:
 
 ```bash
 ./gradlew test
@@ -58,7 +60,7 @@ Untuk IDE, buka root repository sebagai proyek Gradle. Jangan menyimpan `local.p
 | `core/validator/` | Validation policy, diagnostics, dan severity |
 | `core/database/` | Boundary persistence lokal berbasis Room |
 | `media/` | Storage, controlled downloader, byte/image inspection, validator, processor pipeline, dan media tests |
-| `browser/` | Browser session, WebView adapter, dan bridge |
+| `browser/` | Browser session contract/classifier, Android WebView host/session, dan safe inspection bridge |
 | `automation/` | State machine, runner, profile, selector, dan recovery |
 | `docs/` | Keputusan arsitektur dan spesifikasi evolutif |
 | `.github/workflows/` | Build, test, dan lint pada pull request/push |
@@ -69,7 +71,7 @@ Implementasi production berikutnya harus mempertahankan beberapa batas. Kegagala
 
 ## Langkah implementasi berikutnya
 
-Langkah berikut yang paling tepat adalah menambahkan test coverage Compose/instrumentation untuk workspace, lalu Android storage adapter dan WorkManager-backed persistence untuk resume lifecycle media. Setelah itu, skema Room dapat diturunkan dari publishing session; image compression policy, browser handoff, dan selector profile IDN Times tetap dikerjakan sebagai boundary terpisah setelah workflow editor dan DOM aktual diverifikasi secara manual, tanpa melewati mekanisme keamanan platform.
+Langkah berikut yang paling tepat adalah melakukan controlled manual authentication pada device/emulator dan menghasilkan sanitized authenticated editor snapshot. Setelah snapshot direview, tambahkan local HTML fixtures, profile version, dan selector candidates yang memiliki read-back evidence. Jangan mengaktifkan mutation bridge atau publishing automation sebelum editor structure dan session semantics benar-benar diamati.
 
 ## Referensi teknis
 

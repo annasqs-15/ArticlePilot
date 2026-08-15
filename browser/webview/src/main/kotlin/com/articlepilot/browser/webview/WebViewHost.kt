@@ -2,39 +2,22 @@ package com.articlepilot.browser.webview
 
 import android.webkit.WebView
 import com.articlepilot.browser.session.BrowserInspection
-interface WebViewHost {
-    fun attach(webView: WebView)
-    fun detach()
-    suspend fun evaluateJavascript(script: String): JavascriptEvaluation
-    suspend fun inspect(): BrowserInspection
-}
+import com.articlepilot.browser.session.BrowserPage
+import com.articlepilot.browser.session.NavigationState
 
-data class JavascriptEvaluation(
-    val value: String?,
-    val succeeded: Boolean,
-    val errorMessage: String? = null,
-)
-
-/**
- * Adapter boundary only. Production implementation must verify DOM evidence and lifecycle state
- * before reporting success; it must not infer success from a dispatched WebView action.
- */
+/** Explicit fallback for tests or non-Android composition roots; never reports success. */
 class UnimplementedWebViewHost : WebViewHost {
     override fun attach(webView: WebView) = Unit
-
     override fun detach() = Unit
-
-    override suspend fun evaluateJavascript(script: String): JavascriptEvaluation =
-        JavascriptEvaluation(
-            value = null,
-            succeeded = false,
-            errorMessage = "WebView bridge is not implemented yet",
-        )
-
+    override fun setNavigationObserver(observer: WebViewNavigationObserver?) = Unit
+    override fun load(url: String): Boolean = false
+    override fun reload(): Boolean = false
+    override fun stopLoading() = Unit
     override suspend fun inspect(): BrowserInspection =
         BrowserInspection(
-            page = com.articlepilot.browser.session.BrowserPage.UNKNOWN,
+            page = BrowserPage.UNKNOWN,
             url = null,
-            evidence = emptyList(),
+            evidence = listOf("WEBVIEW_HOST_NOT_CONFIGURED"),
+            navigation = NavigationState.FAILED,
         )
 }
