@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Create Article Community | IDN Times</title>
+</head>
+<body>
+  <header>
+    <nav aria-label="IDN Times main navigation">
+      <span>[REDACTED ACCOUNT]</span>
+      <a href="/dashboard/create-article">Create Article</a>
+      <a href="/dashboard">Community Dashboard</a>
+      <button type="button">logout</button>
+    </nav>
+  </header>
+  <main>
+    <h1>Create Article</h1>
+    <p data-cy="temporary-save-status">Progress is Securely Saved Temporarily</p>
+    <button type="button">Reset Article</button>
+
+    <section aria-label="article metadata">
+      <label>Publisher*</label>
+      <select name="publisher"></select>
+      <label>Channel*</label>
+      <select name="category_id"></select>
+      <label>Event Code</label>
+      <input placeholder="Insert Code">
+      <button type="button" data-cy="btn-use-code" disabled>Use Code</button>
+      <label>Article Title*</label>
+      <input type="text" name="details.0.value" placeholder="Insert Title">
+      <span>0/70</span>
+    </section>
+
+    <section aria-label="cover image">
+      <p>Image*</p>
+      <p>Upload your photo here.</p>
+      <p>Horizontal, 3:2 ratio. Formats: jpg, jpeg, heic, png, gif.</p>
+      <button type="button">Upload Image</button>
+    </section>
+
+    <section aria-label="main description">
+      <p data-cy="label-main-description">Main Description*</p>
+      <span>Word: 0</span>
+      <span>Character: 0</span>
+      <div data-cy="editor-content">
+        <div class="tiptap ProseMirror" contenteditable="true" role="textbox" translate="no" tabindex="0">
+          <p></p>
+        </div>
+      </div>
+      <div aria-label="editor toolbar">
+        <button type="button" id="editor-undo" data-cy="editor-undo"></button>
+        <button type="button" id="editor-redo" data-cy="editor-redo" disabled></button>
+        <button type="button" id="editor-bold" data-cy="editor-bold"></button>
+        <button type="button" id="editor-underline" data-cy="editor-underline"></button>
+        <button type="button" id="editor-italic" data-cy="editor-italic"></button>
+        <button type="button" id="editor-strikethrough" data-cy="editor-strikethrough"></button>
+        <button type="button" id="editor-blockqotes" data-cy="editor-blockqotes"></button>
+        <button type="button" id="editor-bullet-list" data-cy="editor-bullet-list"></button>
+        <button type="button" id="editor-bullet-number" data-cy="editor-bullet-number"></button>
+        <button type="button" id="editor-align-left" data-cy="editor-align-left"></button>
+        <button type="button" id="editor-align-center" data-cy="editor-align-center"></button>
+        <button type="button" id="editor-align-right" data-cy="editor-align-right"></button>
+      </div>
+      <button type="button">Add Content</button>
+    </section>
+
+    <!-- No inline-image, draft, preview, review, or submit control was observed in this sanitized snapshot. -->
+  </main>
+</body>
+</html>
